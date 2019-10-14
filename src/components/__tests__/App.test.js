@@ -1,9 +1,11 @@
 import React from "react";
 import { shallow } from "enzyme";
 
-import App from "../App";
-import CommentBox from "../CommentBox";
-import CommentList from "../CommentList";
+// these import paths are only possible because of the
+// jsconfig file in the root directory.
+import App from "components/App";
+import CommentBox from "components/CommentBox";
+import CommentList from "components/CommentList";
 
 // Each test gets one it function
 // it(description_of_the_test, function_with_test_logic)
@@ -14,6 +16,14 @@ import CommentList from "../CommentList";
 // each test should have one or two expectations (though you could theore
 // tically have an infinite amount of them). The methods passed to expectations
 // are called matchers.
+
+// beforeEach lets you do some _before each_ test inside the file.
+// Consider function scoping when using beforeEach and the test function
+// in general. Thus:
+let wrapped;
+beforeEach(() => {
+  wrapped = shallow(<App />);
+});
 
 it("shows a Comment Box component", () => {
   // One way to do it would be like this
@@ -44,10 +54,12 @@ it("shows a Comment Box component", () => {
   // component around doing nothing while other tests are run
   // ReactDOM.unmountComponentAtNode(div);
 
+  /******************/
+
   // If we want to do something similar to l37 we can use Enzyme
   // a testing library from Airbnb.
   // This is the implementation:
-  const wrapped = shallow(<App />);
+
   // First, look inside App to find a CommentBox. It returns an array.
   // Since we expect there to be a single CommentBox, we use the .length
   // and then test it with the matcher .toEqual(1)
@@ -63,6 +75,5 @@ it("shows a Comment Box component", () => {
 });
 
 it("shows a Comment List", () => {
-  const wrapped = shallow(<App />);
   expect(wrapped.find(CommentList).length).toEqual(1);
 });
