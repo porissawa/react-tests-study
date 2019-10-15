@@ -43,4 +43,6 @@ it("has a textarea that users can type in", () => {
   // 1 is done with .find
   // 2 uses .simulate(event[, mockObject])
   wrapped.find("textarea").simulate("change", { target: { value: "aaaa" } });
+  // Since setState is asynchronous, we manually force the update with
+  wrapped.update();
 });
