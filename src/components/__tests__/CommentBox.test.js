@@ -2,10 +2,12 @@ import React from "react";
 import { mount } from "enzyme";
 
 import CommentBox from "components/CommentBox";
+import { setupStore } from "Root";
 
+// If l7 to l10 are confusing, check App.test.js
 let wrapped;
 beforeEach(() => {
-  wrapped = mount(<CommentBox />);
+  wrapped = mount(setupStore(<CommentBox />));
 });
 
 // Like beforeEach, Jest has another elper called afterEach, which does exactly this
@@ -22,13 +24,13 @@ it("has a text area", () => {
   // elements by using CSS selectors.
 
   expect(wrapped.find("textarea").length).toEqual(1);
-  // console.log(wrapped); -- logs ReactWrapper{}
+  // console.log(wrapped); --> logs ReactWrapper{}
 });
 
-// console.log(wrapped); -- logs undefined
+// console.log(wrapped); --> logs undefined
 
 it("has a button", () => {
-  // console.log(wrapped); -- logs ReactWrapper{}
+  // console.log(wrapped); --> logs ReactWrapper{}
   expect(wrapped.find("button").length).toEqual(1);
 });
 
@@ -39,10 +41,36 @@ it("has a button", () => {
 // 4. Force the component to update
 // 5. Assert that the value inside the textarea has changed
 
-it("has a textarea that users can type in", () => {
-  // 1 is done with .find
-  // 2 uses .simulate(event[, mockObject])
-  wrapped.find("textarea").simulate("change", { target: { value: "aaaa" } });
-  // Since setState is asynchronous, we manually force the update with
-  wrapped.update();
+// The describe construc can be used to group together common behaviour between
+// tests. With this, we can scope a before each to a more restricted set of tests.
+describe("the text area", () => {
+  //and thus, we avoid duplicate
+  beforeEach(() => {
+    wrapped.find("textarea").simulate("change", { target: { value: "aaaa" } });
+    wrapped.update();
+  });
+
+  it("accepts user input", () => {
+    // 1 is done with .find()
+    // 2 uses .simulate(event[, mockObject])
+    // Since setState is asynchronous, we manually force the update with .update()
+    // Enzyme has a .prop menthod which expects a name.
+    // Since we update the state on l48 and the component renders whatever
+    // is in there, this is the best way to assert the value inside the
+    // textarea.
+
+    expect(wrapped.find("textarea").prop("value")).toEqual("aaaa");
+  });
+
+  it("is emptied on submit", () => {
+    // Same idea for this test. Since the simulate method will work according
+    // to each tags event, we leave the <button> be and instead work with the
+    // form tag, since that's the one that has a submit event attached to it.
+    // IMPORTANT: Do remember to actually put something on the textarea before
+    // checking if its empty.
+
+    wrapped.find("form").simulate("submit");
+    wrapped.update();
+    expect(wrapped.find("textarea").prop("value")).toEqual("");
+  });
 });

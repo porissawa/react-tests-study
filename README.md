@@ -1,10 +1,10 @@
 # React Test study + notes
 
-## Run yarn/npm start to start the dev server.
+**Run yarn/npm start to start the dev server.**
 
-## Run yarn/npm run test to run the tests.
+**Run yarn/npm run test to run the tests.**
 
-## To keep in mind:
+**To keep in mind:**
 
 All tests are inside src/components/\_\_tests\_\_
 
