@@ -2,6 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import App from "components/App";
-import { setupStore } from "Root";
+import Root from "Root";
 
-ReactDOM.render(setupStore(<App />), document.getElementById("root"));
+ReactDOM.render(
+  <Root>
+    <App />
+  </Root>,
+  document.getElementById("root")
+);
